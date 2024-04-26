@@ -35,33 +35,73 @@ function randomlyMoveCircles(){
 }
 
 function plotCovidData(){
-    d3.selectAll('circle').remove();
-    const dataURL = "https://www.berlin.de/lageso/gesundheit/infektionskrankheiten/corona/tabelle-indikatoren-gesamtuebersicht/index.php/index/all.json?q=";
-    d3.json(dataURL).then( data => {
-        let points = d3.select('svg').selectAll('dots').data(data.index);
-        let maxIndex = data.index[0].id
-        let maxDeath = data.index[1].todesfaelle
-        const max = d3.max(data.index, d => Math.abs(d.neue_faelle));
-        const color = d3.scaleSequential()
-            .domain([max, 0])
-            .interpolator(d3.interpolateRdBu);
-        //console.log(maxDeath)
-      points.join('circle')
-            .attr('cx', d => d.id / maxIndex * 500)
-            .attr('cy', d => 500 - d['todesfaelle'] / maxDeath * 500)
-            .transition()
-            .duration(1000)
-            .attr('r', d => 1 + (d['neue_faelle']/200))
-            .attr("fill", "none")
-            .attr("stroke", d => color(d.neue_faelle))
-            .attr("stroke-width", 1);
-              d3.selectAll('circle').on('mouseover', function(){
-            let date = maxDeath - (d3.select(this).attr('cy') / 500 * maxDeath);
-            let circleColor = d3.select(this).attr('stroke')
-            d3.select('#coord-tracker').text(`${date} deaths`).style('color',circleColor)
+    
+    const url = 'https://www.berlin.de/lageso/gesundheit/infektionskrankheiten/corona/tabelle-indikatoren-gesamtuebersicht/index.php/index/all.json?q=';
+
+    // Load the JSON data
+    d3.json(url)
+      .then(function(data) {
+        // Extract the data you need
+        const dataArray = data.index.map(function(d) {
+          return {
+            date: new Date(d.datum),
+            deaths: +d.neue_faelle
+          };
         });
-     
-})
+				console.log(dataArray)
+        // Set up SVG and margins
+        const margin = { top: 50, right: 30, bottom: 30, left: 100 };
+        const width = 950 - margin.left - margin.right;
+        const height = 450 - margin.top - margin.bottom;
+
+        // Append SVG
+        const svg = d3.select("svg")
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+          .append("g")
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        // Set up scales
+        const xScale = d3.scaleTime()
+          .domain(d3.extent(dataArray, d => d.date))
+          .range([0, width]);
+
+        const yScale = d3.scaleLinear()
+          .domain([0, d3.max(dataArray, d => d.deaths)])
+          .nice()
+          .range([height, 0]);
+
+        // Set up axes
+        const xAxis = d3.axisBottom(xScale);
+        const yAxis = d3.axisLeft(yScale);
+
+        // Append axes
+        svg.append("g")
+          .attr("transform", "translate(0," + height + ")")
+          .call(xAxis);
+
+        svg.append("g")
+          .call(yAxis);
+
+        // Define the line
+        const line = d3.line()
+          .x(d => xScale(d.date))
+          .y(d => yScale(d.deaths));
+				console.log(line)
+        // Append the line
+        svg.append("path")
+          .datum(dataArray)
+          .transition()
+          .duration(2000)
+		  .attr("fill",'none')
+          .attr("stroke", "steelblue")
+          .attr("stroke-width", 1.5)
+          
+          .attr("d", line);
+      })
+      .catch(function(error) {
+        console.log("Error loading the data: " + error);
+      });
 }
 
 function loadData(path){
