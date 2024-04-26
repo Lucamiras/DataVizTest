@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <script src="js/scripts.js"></script>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+</head>
+
+
+<body>
+    <div id="top">
+        <div>
+            <h1><span style='color:red;'>.</span>Data 
+                Visualizations</h1>
+            <h2>Getting started</h2>
+            <p>Here we will do some cool data visualization.</p>
+            
+        </div>
+        <div id="coord-tracker">Push a button to get started.</div>
+        <br>
+    </p>
+    <p>
+        <button id="circle-button" onclick="drawCircles()">ADD CIRCLES</button>
+        <button id="circle-button" onclick="randomlyMoveCircles()">MOVE CIRCLES</button>
+        <button id="circle-button" onclick="loadData('https://raw.githubusercontent.com/chumo/Data2Serve/master/transition_clusters.csv')">Load data</button>
+        <button id="circle-button" onclick="clusterData()">Cluster data</button>
+        <button id="circle-button" onclick="plotCovidData()">Covid Berlin</button>
+        <button id="circle-button" onclick="removeData()">Remove data</button>
+    </p>    
+    <svg id="first-data-viz"></svg>
+    
+    
+</body>
+
+</html>

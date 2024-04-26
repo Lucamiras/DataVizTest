@@ -1,0 +1,55 @@
+
+body{
+    font-family:monospace;
+    font-weight:100;
+    background-color: whitesmoke;
+    color:#444;
+    padding-left:10px;
+    margin-left:100px;
+    margin-top:100px;
+}
+p{
+    margin-left:15px;
+    padding-left:15px;
+}
+table{
+    margin-left:30px;
+}
+h1{
+    font-size: 70px;
+    margin-bottom:80px;
+}
+h2{
+    border-left:7px solid #ccc;
+    padding-left:15px;
+    margin-left:15px;
+    font-size: 30px;;
+}
+ul{
+    list-style:circle;
+}
+#first-data-viz{
+    border-radius:20px;
+    background-color:white;;
+    overflow: hidden;
+    height: 500px;
+    width: 500px;
+    border: darkred dotted 2px;
+    margin-left:30px;
+}
+#circle-button{
+    background-color:darkred;
+    color:white;
+    padding:15px;
+    border: none;
+    border-radius:5px;
+    margin-left:15px;
+    margin-bottom:15px;
+}
+#circle-button:hover{
+    background-color:red;
+    transition:0.2s;
+}
+#coord-tracker{
+    padding-left:30px;
+}
